@@ -91,7 +91,7 @@ if __name__ == '__main__':
     print("========== 多线程执行CPU密集型任务 ==========")
     init_queue()
     time_0 = time.time()
-    thread_list = [threading.Thread(target=task_cpu, args=(i)) for i in range(c)]
+    thread_list = [threading.Thread(target=task_cpu, args=(i,)) for i in range(c)]
 
     for t in thread_list:
         t.start()
