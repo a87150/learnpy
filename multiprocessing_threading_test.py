@@ -16,7 +16,7 @@ def init_queue():
     print("init g_queue end")
 
 # 定义一个IO密集型任务：利用time.sleep()
-def task_io(task_id):
+def task_io(task_id, g_queue = g_queue):
     print("IOTask[%s] start" % task_id)
 
     while not g_queue.empty():
@@ -31,7 +31,7 @@ def task_io(task_id):
 
 g_search_list = list(range(10000))
 # 定义一个计算密集型任务：利用一些复杂加减乘除、列表查找等
-def task_cpu(task_id):
+def task_cpu(task_id, g_queue = g_queue):
     print("CPUTask[%s] start" % task_id)
 
     while not g_queue.empty():
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     print("========== 多进程执行IO密集型任务 ==========")
     init_queue()
     time_0 = time.time()
-    process_list = [multiprocessing.Process(target=task_io, args=(i,)) for i in range(c)]
+    process_list = [multiprocessing.Process(target=task_io, args=(i, g_queue)) for i in range(c)]
 
     for p in process_list:
         p.start()
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     print("========== 多线程执行CPU密集型任务 ==========")
     init_queue()
     time_0 = time.time()
-    thread_list = [threading.Thread(target=task_cpu, args=(i,)) for i in range(c)]
+    thread_list = [threading.Thread(target=task_cpu, args=(i)) for i in range(c)]
 
     for t in thread_list:
         t.start()
@@ -105,7 +105,7 @@ if __name__ == '__main__':
     print("========== 多进程执行cpu密集型任务 ==========")
     init_queue()
     time_0 = time.time()
-    process_list = [multiprocessing.Process(target=task_cpu, args=(i,)) for i in range(c)]
+    process_list = [multiprocessing.Process(target=task_cpu, args=(i, g_queue)) for i in range(c)]
 
     for p in process_list:
         p.start()
